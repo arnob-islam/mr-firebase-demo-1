@@ -120,7 +120,6 @@ export default function PrimarySearchAppBar() {
 
     const log_out = async () => {
         try {
-            console.log('you ');
             await auth.signOut()
             location.push('/login/')
         } catch (error) {

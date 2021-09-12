@@ -78,8 +78,7 @@ export default function Login_() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await Login(value.email, value.password)
-            console.log(res);
+            await Login(value.email, value.password)
             location.push('/')
         } catch (error) {
 
