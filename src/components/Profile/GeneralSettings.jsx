@@ -70,12 +70,10 @@ const GeneralSettings = () => {
                 setloading(false)
             }
             else {
-<<<<<<< HEAD
                 setuserData({
                     email: ''
                 })
-=======
->>>>>>> 85919a0a127f8c079bfb748f35bc478d5a74f4e7
+
                 setloading(true)
             }
         })
@@ -172,11 +170,7 @@ const GeneralSettings = () => {
             <form onSubmit={updateUserInformation}>
                 <div className={classes.form_input} >
 
-<<<<<<< HEAD
                     <TextField label="Change your Email" name='email' id="standard-size-small" defaultValue={userData.email ? userData.email : ''} disabled={updateDesable}
-=======
-                    <TextField label="Change your Email" name='email' id="standard-size-small" defaultValue={userData.email && userData.email} disabled={updateDesable}
->>>>>>> 85919a0a127f8c079bfb748f35bc478d5a74f4e7
                         size="small" required onChange={handleFormValue} />
 
                     <TextField label="Password" name='password' id="standard-size-normal"
