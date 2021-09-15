@@ -18,12 +18,12 @@ import { SignUpWithEmail, SignWithGoogle, SignWithFaceBook, SeUsertDetailsToStor
 import { StapmTime } from '../../Firebase/config';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { useGolobalContext } from './../contex/TheProvider';
+
 
 function ErrorAlert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
 
+    const { setshowTheRefreshPage } = useGolobalContext()
 
     const location = useHistory()
 
@@ -80,6 +81,9 @@ export default function SignUp() {
             location.push('/')
         }
         catch (error) {
+            if (error.code === 'auth/network-request-failed') {
+                setshowTheRefreshPage(true)
+            }
             setsetTheButtonDisable(false)
             console.log(error.code);
         }
@@ -100,6 +104,9 @@ export default function SignUp() {
             location.push('/')
         }
         catch (error) {
+            if (error.code === 'auth/network-request-failed') {
+                setshowTheRefreshPage(true)
+            }
             setsetTheButtonDisable(false)
             console.log(error.code);
         }
@@ -136,6 +143,9 @@ export default function SignUp() {
                 location.push('/')
             }
         } catch (error) {
+            if (error.code === 'auth/network-request-failed') {
+                setshowTheRefreshPage(true)
+            }
             if (error.code === 'auth/weak-password') {
                 setshowAlert(true)
                 seterrorMassage('Your Password is soo week')

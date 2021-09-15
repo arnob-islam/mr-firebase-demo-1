@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login_() {
 
-    const { showTheRefreshPage } = useGolobalContext()
+    const { setshowTheRefreshPage } = useGolobalContext()
 
     const classes = useStyles();
     const location = useHistory()
@@ -124,7 +124,7 @@ export default function Login_() {
         } catch (error) {
             console.log(error.code);
             if (error.code === 'auth/network-request-failed') {
-                showTheRefreshPage(true)
+                setshowTheRefreshPage(true)
             }
             if (error.code === 'auth/popup-closed-by-user') {
                 setMassage({ massage: 'Error Try Again', state: true, type: 'error' })
@@ -151,7 +151,7 @@ export default function Login_() {
         } catch (error) {
             console.log(error.code);
             if (error.code === 'auth/network-request-failed') {
-                showTheRefreshPage(true)
+                setshowTheRefreshPage(true)
             }
             if (error.code === 'auth/popup-closed-by-user') {
                 setMassage({ massage: 'Error Try Again', state: true, type: 'error' })
