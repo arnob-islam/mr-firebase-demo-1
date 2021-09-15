@@ -17,3 +17,12 @@ code {
   align-items: center;
   justify-content: center;
 }
+
+.icon_single svg {
+  color: #5f5f5f;
+  width: 32px;
+  height: 32px;
+}
+.user_info_container {
+  width: 16rem;
+}

@@ -1,98 +1,64 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-// import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { Container } from '@material-ui/core';
-import PublicData from './PublicData';
-import GeneralSettings from './GeneralSettings';
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
+import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
+// import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
+import { Link } from 'react-router-dom';
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    <div>{children}</div>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
-}
 
 const useStyles = makeStyles((theme) => ({
     root__: {
         // flexGrow: 1,
         display: 'flex',
-        height: 'auto',
-        flexWrap: 'wrap',
+        // gridTemplateColumns: 'minmax(268px,1fr) minmax(752px,936px) minmax(160px,1fr)'
+        flexWrap: "noWrap",
+        gap: '2rem'
 
     },
-    theTabs: {
-        borderRight: `1px solid ${theme.palette.divider}`,
+    tab_wrapper: {
+        width: '3rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        '& > svg': {
+            color: '#777'
+        }
     },
     section_: {
         padding: '3.5rem 0'
     }
 }));
 
-export default function Index() {
+export default function Index({ children }) {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     return (
         <section className={classes.section_}>
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" style={{ padding: '0' }}>
                 <div className="wrapper">
                     <div className={`${classes.root__} wrapper_body`}>
-                        <div className="tab_site_wrapper">
-                            <Tabs
-                                orientation="vertical"
-                                // variant="scrollable"
-                                value={value}
-                                onChange={handleChange}
-                                aria-label="Vertical tabs example"
-                                className={classes.theTabs}>
-
-                                <Tab label="Public Details" {...a11yProps(0)} />
-                                <Tab label="Genaral Settings" {...a11yProps(1)} />
-
-                            </Tabs>
+                        <div className={`${classes.tab_wrapper}`}>
+                            <div className="icon_single">
+                                <Link to='/public/settings/'>
+                                    <SortOutlinedIcon />
+                                </Link>
+                            </div>
+                            <div className="icon_single">
+                                <Link to='/ganarel/settings/'>
+                                    <TuneOutlinedIcon />
+                                </Link>
+                            </div>
+                            <div className="icon_single">
+                                {/* <Link to='/construction/'>
+                                    <SettingsApplicationsOutlinedIcon />
+                                </Link> */}
+                            </div>
                         </div>
                         <div className="user_info_container">
-                            <TabPanel value={value} index={0}>
-                                <PublicData />
-                            </TabPanel>
-                            <TabPanel value={value} index={1}>
-                                <GeneralSettings />
-                            </TabPanel>
-
+                            {children}
                         </div>
 
                     </div>

@@ -66,16 +66,21 @@ const PublicData = () => {
     React.useEffect(() => {
         const subscribe = auth.onAuthStateChanged(user => {
             if (user) {
-
                 setuserData({
                     firsName: user.displayName.split(' ')[0],
                     lastName: user.displayName.split(' ')[1],
                     photoURL: user.photoURL
                 })
                 setloading(false)
+            } else {
+                setuserData({
+                    firsName: '',
+                    lastName: '',
+                    photoURL: ''
+                })
             }
         })
-        return () => subscribe
+        return subscribe
     }, [])
 
 
@@ -141,7 +146,6 @@ const PublicData = () => {
             console.log(error.code);
         }
     }
-
 
 
     const handleClose = (event, reason) => {

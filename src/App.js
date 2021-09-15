@@ -14,6 +14,11 @@ import SubPageBlog from './SubPages/Blog';
 import SubPageService from './SubPages/services';
 import Error from './components/singleComponents/Error';
 import ScroolFixed from './components/singleComponents/ScroolFixed';
+import PublicData from './components/Profile/PublicData';
+import GeneralSettings from './components/Profile/GeneralSettings';
+
+
+
 
 const App = () => {
 
@@ -44,9 +49,19 @@ const App = () => {
         <Route path='/login/'>
           <Login />
         </Route>
-        <Route path='/user/profile/'>
-          <UserProfile />
+
+        <Route path='/public/settings/'>
+          <UserProfile>
+            <PublicData />
+          </UserProfile>
         </Route>
+
+        <Route path='/ganarel/settings/'>
+          <UserProfile>
+            <GeneralSettings />
+          </UserProfile>
+        </Route>
+
         <Route path='/about/'>
           <SubPageAbout />
         </Route>

@@ -13,9 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link, useHistory } from 'react-router-dom'
-// import { Login, SignWithFaceBook, SignWithGoogle, RedirectWithGoogleLogin } from '../../Firebase/Syntex';
-import { Login } from '../../Firebase/Syntex';
-// import { db } from '../../Firebase/config';
+import { DELET_USER, Login, SignWithFaceBook, SignWithGoogle, } from '../../Firebase/Syntex';
+import { db } from '../../Firebase/config';
+import { useGolobalContext } from './../contex/TheProvider';
 
 function ErrorAlert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login_() {
+
+    const { showTheRefreshPage } = useGolobalContext()
+
     const classes = useStyles();
     const location = useHistory()
 
@@ -54,18 +57,22 @@ export default function Login_() {
 
 
     })
-    const [showAlert, setshowAlert] = React.useState(false);
+    const [massage, setMassage] = React.useState({ massage: '', type: 'error', state: false });
 
-    const [errorMassage, seterrorMassage] = React.useState('');
-
-    // const [theButtonDisable, setsetTheButtonDisable] = React.useState(false)
-    // const [cheackMail, setcheackMail] = React.useState('')
-    // const [isUserExeist, setisUserExeist] = React.useState(false)
-    // const [goToHome, setgoToHome] = React.useState(false)
+    const [theButtonDisable, setsetTheButtonDisable] = React.useState(false)
 
 
+    const IsTheUserExist = async (mail) => {
+        let detailscarryer = []
+        const snapshot = await db.collection('user').get();
+        snapshot.forEach((doc) => {
+            detailscarryer.push(doc.data().mail)
+        });
 
-
+        if (detailscarryer) {
+            return detailscarryer.some(e => e === mail)
+        }
+    }
 
     const handleFormValue = (e) => {
         const TheName = e.target.name
@@ -78,19 +85,15 @@ export default function Login_() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await Login(value.email, value.password)
-            console.log(res);
+            await Login(value.email, value.password)
             location.push('/')
+
         } catch (error) {
-
             if (error.code === 'auth/user-not-found') {
-                setshowAlert(true)
-                seterrorMassage(`User Dosen't exist`)
-
+                setMassage({ massage: `User Dosen't exist`, state: true, type: 'error' })
             }
             else if (error.code === 'auth/wrong-password') {
-                setshowAlert(true)
-                seterrorMassage(`Wrong password`)
+                setMassage({ massage: `Wrong password`, state: true, type: 'error' })
             }
         }
     }
@@ -100,101 +103,65 @@ export default function Login_() {
             return;
         }
 
-        setshowAlert(false);
+        setMassage(false);
     };
 
 
-    // const loginWithGoogle = async () => {
-    //     try {
-    //         setsetTheButtonDisable(true)
-    //         const res = await RedirectWithGoogleLogin()
-    //         console.log(res, 'to see the login');
-    //         // setcheackMail(res.user.email)
-    //         location.push('/')
-    //         // if (cheackMail) {
-    //         //     console.log('one stap');
-    //         //     if (isUserExeist) {
-    //         //         console.log('two stap');
+    const loginWithGoogle = async () => {
+        try {
+            setsetTheButtonDisable(true)
+            const res = await SignWithGoogle()
+            const exist__ = await IsTheUserExist(res.user.email)
+            if (!exist__) {
+                await DELET_USER(res.user)
+                setMassage({ massage: 'You Are Not SignUp', state: true, type: 'error' })
+            }
+            if (exist__) {
+                location.push('/')
+            }
+            setsetTheButtonDisable(false)
 
-    //         //         return setgoToHome(true)
+        } catch (error) {
+            console.log(error.code);
+            if (error.code === 'auth/network-request-failed') {
+                showTheRefreshPage(true)
+            }
+            if (error.code === 'auth/popup-closed-by-user') {
+                setMassage({ massage: 'Error Try Again', state: true, type: 'error' })
+            }
+            setsetTheButtonDisable(false)
+        }
 
-    //         //         location.push('/')
-    //         //         // window.location.href = '/'
-    //         //         // setcheackMail('')
-    //         //     }
-    //         //     else {
-    //         //         alert('user is not signup')
-    //         //         // setcheackMail('')
+    }
+    const loginWithFaceBook = async () => {
+        try {
+            setsetTheButtonDisable(true)
+            const res = await SignWithFaceBook()
 
-    //         //     }
-    //         // }
-    //         // if (isUserExeist) {
-    //         //     location.push('/')
-    //         //     // window.location.href = '/'
-    //         //     // setcheackMail('')
-    //         // }
-    //     } catch (error) {
-    //         console.log(error.message);
-    //         alert('error in google')
-    //         setsetTheButtonDisable(false)
-    //     }
+            const exist__ = await IsTheUserExist(res.user.email)
+            if (!exist__) {
+                await DELET_USER(res.user)
+                setMassage({ massage: 'You Are Not SignUp', state: true, type: 'error' })
+            }
+            if (exist__) {
+                location.push('/')
+            }
+            setsetTheButtonDisable(false)
 
-    // }
-    // const loginWithFaceBook = async () => {
-    //     try {
-    //         setsetTheButtonDisable(true)
-    //         const res = await SignWithFaceBook()
-    //         // setcheackMail(res.user.email)
-    //         location.push('/')
-    //         // if (cheackMail) {
-    //         //     if (isUserExeist) {
-    //         //         return setgoToHome(true)
+        } catch (error) {
+            console.log(error.code);
+            if (error.code === 'auth/network-request-failed') {
+                showTheRefreshPage(true)
+            }
+            if (error.code === 'auth/popup-closed-by-user') {
+                setMassage({ massage: 'Error Try Again', state: true, type: 'error' })
+            }
+            setsetTheButtonDisable(false)
 
-    //         //         location.push('/')
-    //         //         // window.location.href = '/'
-    //         //         // setcheackMail('')
-    //         //     }
-    //         //     else {
-    //         //         alert('user is not signup')
-    //         //         // setcheackMail('')
-
-    //         //     }
-    //         // }
-
-    //     } catch (error) {
-    //         console.log(error);
-    //         alert('error in facebook')
-    //         setsetTheButtonDisable(false)
-
-    //     }
-    // }
-
-    // React.useEffect(() => {
-    //     const subscribe = db.collection('user').orderBy('createdAt').onSnapshot(shot => {
-    //         let detailscarryer = []
-    //         shot.forEach(e => {
-    //             detailscarryer.push(e.data().mail)
-    //         })
-    //         if (detailscarryer) {
-    //             const isuser = detailscarryer.some(e => e === cheackMail)
-    //             console.log(isuser);
-    //             setisUserExeist(isuser)
-    //         } else {
-    //             setisUserExeist('')
-    //         }
-    //     })
-    //     return subscribe
-    // }, [cheackMail])
+        }
+    }
 
 
-
-    // React.useEffect(() => {
-    //     if (cheackMail) {
-    //         if (isUserExeist) {
-    //             location.push('/')
-    //         }
-    //     }
-    // }, [])
 
 
     return (
@@ -257,7 +224,7 @@ export default function Login_() {
                             </Link>
                         </Grid>
                     </Grid>
-                    {/* <div className="other_sign_in_container">
+                    <div className="other_sign_in_container">
 
                         <Grid item>
                             <Button
@@ -289,13 +256,13 @@ export default function Login_() {
 
                         </Grid>
 
-                    </div> */}
+                    </div>
                 </form>
             </div>
             <div className="errorMassage">
-                <Snackbar open={showAlert} autoHideDuration={1000} onClose={handleClose}>
-                    <ErrorAlert onClose={handleClose} severity="error">
-                        {errorMassage}
+                <Snackbar open={massage.state} autoHideDuration={1500} onClose={handleClose}>
+                    <ErrorAlert onClose={handleClose} severity={massage.type}>
+                        {massage.massage}
                     </ErrorAlert>
                 </Snackbar>
             </div>

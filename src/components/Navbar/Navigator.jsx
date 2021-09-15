@@ -120,7 +120,6 @@ export default function PrimarySearchAppBar() {
 
     const log_out = async () => {
         try {
-            console.log('you ');
             await auth.signOut()
             location.push('/login/')
         } catch (error) {
@@ -141,7 +140,7 @@ export default function PrimarySearchAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose} className={`user_links`}> <Link to='/user/profile/'>Profile</Link> </MenuItem>
+            <MenuItem onClick={handleMenuClose} className={`user_links`}> <Link to='/public/settings/'>Profile</Link> </MenuItem>
             <MenuItem onClick={log_out} className={`user_links`}>Log out</MenuItem>
         </Menu>
     );

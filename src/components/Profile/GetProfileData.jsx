@@ -9,7 +9,7 @@ const GetProfileData = () => {
             console.log(user.uid, 'from profile');
             if (user) {
                 db.collection('user').doc(user.uid).get().then(e => {
-                    console.log(e.data(), 'see the datas');
+                    console.log(e.data(), ' see the datas');
                 })
             } else {
             }
@@ -18,10 +18,6 @@ const GetProfileData = () => {
 
     }, [])
 
-
-    // useEffect(() => {
-    //     const sub = db.collection('user').orderBy('createdAt', 'desc')
-    // }, [])
 
     return (
         <div>

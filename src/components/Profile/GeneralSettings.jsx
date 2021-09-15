@@ -64,14 +64,19 @@ const GeneralSettings = () => {
     React.useEffect(() => {
         const subscribe = auth.onAuthStateChanged(user => {
             if (user) {
-
                 setuserData({
                     email: user.email
                 })
                 setloading(false)
             }
+            else {
+                setuserData({
+                    email: ''
+                })
+                setloading(true)
+            }
         })
-        return () => subscribe
+        return subscribe
     }, [])
 
 
@@ -142,8 +147,6 @@ const GeneralSettings = () => {
 
 
 
-
-
     const classes = useStyles();
 
     const handleClose = (event, reason) => {
@@ -166,8 +169,8 @@ const GeneralSettings = () => {
             <form onSubmit={updateUserInformation}>
                 <div className={classes.form_input} >
 
-                    <TextField label="Change your Email" name='email' id="standard-size-small" defaultValue={userData.email} disabled={updateDesable}
-                        size="small" required />
+                    <TextField label="Change your Email" name='email' id="standard-size-small" defaultValue={userData.email ? userData.email : ''} disabled={updateDesable}
+                        size="small" required onChange={handleFormValue} />
 
                     <TextField label="Password" name='password' id="standard-size-normal"
                         onChange={handleFormValue} placeholder='leave it empty if want"t to change'

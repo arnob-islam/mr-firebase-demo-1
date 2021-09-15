@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Link from '@material-ui/core/Link';
+
 import Grid from '@material-ui/core/Grid';
 // import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -13,8 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link, useHistory } from 'react-router-dom'
-import { SignUpWithEmail, SeUsertDetailsToStorage } from '../../Firebase/Syntex';
-// import { SignUpWithEmail, SignWithGoogle, SignWithFaceBook, SeUsertDetailsToStorage } from '../../Firebase/Syntex';
+// import { SignUpWithEmail, SeUsertDetailsToStorage } from '../../Firebase/Syntex';
+import { SignUpWithEmail, SignWithGoogle, SignWithFaceBook, SeUsertDetailsToStorage } from '../../Firebase/Syntex';
 import { StapmTime } from '../../Firebase/config';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -65,43 +65,45 @@ export default function SignUp() {
 
     const [errorMassage, seterrorMassage] = React.useState('');
 
-    // const [theButtonDisable, setsetTheButtonDisable] = React.useState(false)
+    const [theButtonDisable, setsetTheButtonDisable] = React.useState(false)
 
-    // const signupWithGoogle = async (e) => {
-    //     try {
-    //         setsetTheButtonDisable(true)
-    //         const res = await SignWithGoogle()
-    //         SeUsertDetailsToStorage(res, {
-    //             name: res.user.displayName,
-    //             mail: res.user.email,
-    //             createdAt: StapmTime()
-    //         })
-    //         location.push('/')
-    //     }
-    //     catch (error) {
-    //         setsetTheButtonDisable(false)
-    //         console.log(error.code);
-    //     }
+    const signupWithGoogle = async (e) => {
+        try {
+            setsetTheButtonDisable(true)
+            const res = await SignWithGoogle()
+            await SeUsertDetailsToStorage(res.user.uid, {
+                name: res.user.displayName,
+                mail: res.user.email,
+                photoURL: res.user.photoURL,
+                createdAt: StapmTime()
+            })
+            location.push('/')
+        }
+        catch (error) {
+            setsetTheButtonDisable(false)
+            console.log(error.code);
+        }
 
-    // }
+    }
 
 
-    // const signupWithFacebook = async () => {
-    //     try {
-    //         setsetTheButtonDisable(true)
-    //         const res = await SignWithFaceBook()
-    //         SeUsertDetailsToStorage(res, {
-    //             name: res.user.displayName,
-    //             mail: res.user.email,
-    //             createdAt: StapmTime()
-    //         })
-    //         location.push('/')
-    //     }
-    //     catch (error) {
-    //         setsetTheButtonDisable(false)
-    //         console.log(error.code);
-    //     }
-    // }
+    const signupWithFacebook = async () => {
+        try {
+            setsetTheButtonDisable(true)
+            const res = await SignWithFaceBook()
+            await SeUsertDetailsToStorage(res.user.uid, {
+                name: res.user.displayName,
+                mail: res.user.email,
+                photoURL: res.user.photoURL,
+                createdAt: StapmTime()
+            })
+            location.push('/')
+        }
+        catch (error) {
+            setsetTheButtonDisable(false)
+            console.log(error.code);
+        }
+    }
 
     const handleFormValue = (e) => {
         const TheName = e.target.name
@@ -125,7 +127,7 @@ export default function SignUp() {
             }
             else {
                 const res = await SignUpWithEmail(value.email, value.password)
-                SeUsertDetailsToStorage(res.user.uid, {
+                await SeUsertDetailsToStorage(res.user.uid, {
                     name: `${value.firstName} ${value.lastName}`,
                     email: value.email,
                     photoURL: res.user.photoURL,
@@ -243,7 +245,7 @@ export default function SignUp() {
                             </Link>
                         </Grid>
                     </Grid>
-                    {/* <div className="other_sign_in_container">
+                    <div className="other_sign_in_container">
 
                         <Grid item>
                             <Button
@@ -275,7 +277,7 @@ export default function SignUp() {
 
                         </Grid>
 
-                    </div> */}
+                    </div>
 
                 </form>
                 <div className="errorMassage">

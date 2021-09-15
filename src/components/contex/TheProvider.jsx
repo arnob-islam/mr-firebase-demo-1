@@ -100,7 +100,7 @@ const TheProvider = ({ children }) => {
 
 
     return (
-        <TheContextProvider.Provider value={{ isUserIsTrue, loading, showTheRefreshPage }}>
+        <TheContextProvider.Provider value={{ isUserIsTrue, loading, showTheRefreshPage, setshowTheRefreshPage }}>
             {children}
         </TheContextProvider.Provider>
     )

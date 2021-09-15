@@ -1,4 +1,5 @@
 import { auth, provider, facebookProvider, db } from "./config";
+import { deleteUser } from "firebase/auth";
 
 const Login = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password)
@@ -36,9 +37,13 @@ const SignWithFaceBook = () => {
     return auth.signInWithPopup(facebookProvider)
 }
 
+const DELET_USER = (user) => {
+    return deleteUser(user)
+}
+
 const RedirectWithGoogleLogin = () => {
     return auth.signInWithRedirect(provider)
 }
 
 
-export { Login, SignUpWithEmail, SignWithGoogle, SignWithFaceBook, SeUsertDetailsToStorage, RedirectWithGoogleLogin, ForgetPassword, UpdateUserEmail, UpdateUserPassword }
+export { Login, SignUpWithEmail, SignWithGoogle, SignWithFaceBook, SeUsertDetailsToStorage, RedirectWithGoogleLogin, ForgetPassword, UpdateUserEmail, UpdateUserPassword, DELET_USER }
